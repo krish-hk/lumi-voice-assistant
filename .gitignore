@@ -31,7 +31,8 @@ models/
 *.pth
 *.gguf
 
-# Piper voice models
+# Piper executable and voice models
+piper/
 voices/
 *.onnx.json
 

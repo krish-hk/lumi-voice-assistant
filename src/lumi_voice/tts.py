@@ -14,7 +14,7 @@ from typing import Optional
 
 import numpy as np
 
-from lumi_voice.config import TTSConfig
+from lumi_voice.config import TTSConfig, PROJECT_ROOT
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +52,8 @@ class TextToSpeech:
         else:
             # Also check common locations
             common_paths = [
+                PROJECT_ROOT / "piper" / "piper",
+                PROJECT_ROOT / "piper" / "piper.exe",
                 Path.home() / "piper" / "piper",
                 Path.home() / "piper" / "piper.exe",
                 Path(".") / "piper" / "piper",
@@ -74,8 +76,25 @@ class TextToSpeech:
     def get_voice_model_path(self) -> Optional[str]:
         """Get the configured or resolved voice model path."""
         if self.config.voice_model_path:
+            # Check direct or relative to PROJECT_ROOT
+            raw_path = Path(self.config.voice_model_path)
+            if raw_path.exists():
+                return str(raw_path)
+            proj_path = PROJECT_ROOT / self.config.voice_model_path
+            if proj_path.exists():
+                return str(proj_path)
             return self.config.voice_model_path
-        # Let Piper resolve the model name if it supports --model
+
+        # Auto-detect voice model in voices/
+        candidates = [
+            PROJECT_ROOT / "voices" / f"{self.config.voice_model}.onnx",
+            Path("voices") / f"{self.config.voice_model}.onnx",
+        ]
+        for c in candidates:
+            if c.exists():
+                return str(c)
+
+        # Fallback to model name
         return self.config.voice_model
 
     def check_availability(self) -> tuple[bool, str]:
@@ -88,8 +107,11 @@ class TextToSpeech:
             )
 
         model_path = self.get_voice_model_path()
-        if self.config.voice_model_path and not Path(self.config.voice_model_path).exists():
-            return False, f"Voice model not found at: {self.config.voice_model_path}"
+        if self.config.voice_model_path:
+            raw_path = Path(self.config.voice_model_path)
+            proj_path = PROJECT_ROOT / self.config.voice_model_path
+            if not raw_path.exists() and not proj_path.exists():
+                return False, f"Voice model not found at: {self.config.voice_model_path}"
 
         return True, f"Piper TTS ready (voice: {model_path})"
 

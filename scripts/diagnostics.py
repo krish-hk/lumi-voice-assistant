@@ -70,10 +70,22 @@ def check_ollama():
 
 
 def check_piper():
+    from pathlib import Path
     path = shutil.which("piper") or shutil.which("piper.exe")
+    if not path:
+        candidates = [
+            Path("piper") / "piper.exe",
+            Path("piper") / "piper",
+            Path(__file__).parent.parent / "piper" / "piper.exe",
+            Path(__file__).parent.parent / "piper" / "piper",
+        ]
+        for c in candidates:
+            if c.exists():
+                path = str(c)
+                break
     if path:
         return True, f"Piper found at {path}"
-    return False, "Piper not found in PATH. Download from https://github.com/rhasspy/piper/releases"
+    return False, "Piper not found in PATH or ./piper/. Download from https://github.com/rhasspy/piper/releases"
 
 
 def check_ros2():

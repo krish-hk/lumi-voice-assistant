@@ -37,7 +37,7 @@ llm:
   backend: "ollama"   # ollama (default)
   ollama:
     host: "http://localhost:11434"
-    model: "gemma3:1b"
+    model: "phi3:latest"
     timeout_s: 60
     stream: true
   conversation:
@@ -57,7 +57,7 @@ llm:
 # Text-to-Speech (Piper)
 tts:
   voice_model: "en_US-lessac-medium"  # Piper voice model name
-  voice_model_path: null  # Override: absolute path to .onnx voice model
+  voice_model_path: "voices/en_US-lessac-medium.onnx"
   speaker_id: null
   length_scale: 1.0  # Speed: <1.0 = faster, >1.0 = slower
   sentence_silence_s: 0.3
