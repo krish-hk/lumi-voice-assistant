@@ -1,0 +1,66 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+
+# Models and large files
+models/
+*.onnx
+*.bin
+*.pt
+*.pth
+*.gguf
+
+# Piper voice models
+voices/
+*.onnx.json
+
+# Audio files
+recordings/
+*.wav
+*.mp3
+*.ogg
+*.flac
+
+# Logs
+logs/
+*.log
+
+# Cache
+.cache/
+*.cache
+whisper_cache/
+
+# User config (may contain paths)
+config/user.yaml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Coverage
+.coverage
+htmlcov/
+
+# Pytest
+.pytest_cache/
